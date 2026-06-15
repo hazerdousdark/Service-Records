@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Angels – Space Marine Service Record</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0d1a0d;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #ddd8c0;
+    padding: 2rem;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #112211;
+    border: 2px solid #b8960c;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(184,150,12,0.15);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: #1a3a1a;
+    border-bottom: 2px solid #b8960c;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .chapter-emblem {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+  }
+
+  .title-block { flex: 1; }
+
+  .chapter-name {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #b8960c;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-family: Arial, sans-serif;
+  }
+
+  .doc-title {
+    font-size: 24px;
+    color: #f0ead0;
+    margin-bottom: 4px;
+  }
+
+  .doc-sub {
+    font-size: 12px;
+    color: #7a9a6a;
+    font-family: Arial, sans-serif;
+    font-style: italic;
+  }
+
+  .classification {
+    background: #6b0000;
+    border: 1px solid #aa2020;
+    border-radius: 4px;
+    padding: 8px 14px;
+    font-size: 11px;
+    color: #ffb3b3;
+    letter-spacing: 0.1em;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  /* ── BODY ── */
+  .body { padding: 1.5rem 2rem; display: flex; flex-direction: column; gap: 1.25rem; }
+
+  /* ── SECTION ── */
+  .section {
+    border: 1px solid rgba(184,150,12,0.35);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .section-header {
+    background: rgba(184,150,12,0.12);
+    border-bottom: 1px solid rgba(184,150,12,0.35);
+    padding: 7px 16px;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+    color: #c9a820;
+    text-transform: uppercase;
+  }
+
+  /* ── FIELDS ── */
+  .fields { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+
+  .field {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 10px;
+    align-items: start;
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+  }
+
+  .label {
+    color: #7a9a6a;
+    padding-top: 5px;
+    line-height: 1.4;
+  }
+
+  .val {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 3px;
+    padding: 5px 10px;
+    color: #5a6a4a;
+    font-style: italic;
+    min-height: 30px;
+    font-size: 13px;
+  }
+
+  .val.tall { min-height: 70px; }
+  .val.redacted {
+    color: #7a0000;
+    font-family: Georgia, serif;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── TABLE ROWS (rank history, campaigns) ── */
+  .table-header {
+    display: grid;
+    gap: 8px;
+    padding: 8px 16px 6px;
+    font-size: 11px;
+    font-family: Arial, sans-serif;
+    color: #7a9a6a;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    letter-spacing: 0.05em;
+  }
+
+  .table-row {
+    display: grid;
+    gap: 8px;
+    padding: 6px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .table-row:last-child { border-bottom: none; }
+
+  .cell {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 3px;
+    padding: 4px 10px;
+    color: #5a6a4a;
+    font-style: italic;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    min-height: 26px;
+  }
+
+  .rank-grid { grid-template-columns: 110px 1fr 150px; }
+  .campaign-grid { grid-template-columns: 110px 1fr 110px 90px; }
+
+  /* ── HONOURS GRID ── */
+  .honours-grid {
+    padding: 12px 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .honor-row { display: flex; flex-direction: column; gap: 4px; }
+  .honor-label { font-size: 11px; font-family: Arial, sans-serif; color: #7a9a6a; }
+  .honor-val {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 3px;
+    padding: 4px 10px;
+    color: #5a6a4a;
+    font-style: italic;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    min-height: 26px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 2px solid #b8960c;
+    background: #1a3a1a;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .seal { font-size: 12px; font-family: Arial, sans-serif; color: #7a9a6a; }
+  .seal strong { color: #b8960c; font-weight: normal; }
+  .motto { font-size: 12px; color: #4a5a3a; font-style: italic; }
+
+  .ornament {
+    text-align: center;
+    color: rgba(184,150,12,0.3);
+    font-size: 18px;
+    letter-spacing: 0.3em;
+    padding: 6px 0 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <svg class="chapter-emblem" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#b8960c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Sword blade -->
+        <line x1="40" y1="8" x2="40" y2="70"/>
+        <!-- Blade tip -->
+        <polygon points="40,8 36,20 40,17 44,20" fill="#b8960c" stroke="none"/>
+        <!-- Crossguard -->
+        <line x1="32" y1="48" x2="48" y2="48"/>
+        <line x1="33" y1="52" x2="47" y2="52"/>
+        <!-- Wings left -->
+        <path d="M40,26 Q28,30 18,32 Q26,34 40,40" fill="rgba(184,150,12,0.18)" stroke="#b8960c" stroke-width="1.4"/>
+        <path d="M22,30 Q16,34 12,38 Q18,36 26,38" fill="rgba(184,150,12,0.1)" stroke="#b8960c" stroke-width="1"/>
+        <!-- Wings right -->
+        <path d="M40,26 Q52,30 62,32 Q54,34 40,40" fill="rgba(184,150,12,0.18)" stroke="#b8960c" stroke-width="1.4"/>
+        <path d="M58,30 Q64,34 68,38 Q62,36 54,38" fill="rgba(184,150,12,0.1)" stroke="#b8960c" stroke-width="1"/>
+      </g>
+    </svg>
+    <div class="title-block">
+      <p class="chapter-name">The Dark Angels · First Legion · Successors of the Lion</p>
+      <h1 class="doc-title">Service Record of Battle-Brother</h1>
+      <p class="doc-sub">Maintained by the Reclusiam, Rock Fortress-Monastery, Calibanite Debris Field</p>
+    </div>
+    <div class="classification">RESTRICTED<br>CHAPTER USE ONLY<br>EYES OF THE LION</div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- I. PERSONAL DESIGNATION -->
+    <div class="section">
+      <div class="section-header">I. &nbsp;Personal Designation</div>
+      <div class="fields">
+        <div class="field"><span class="label">Cognomen (Full Name)</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Chapter Designation / Number</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Squad</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Company</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Current Rank</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Role / Specialisation</span><div class="val">— to be entered —</div></div>
+      </div>
+    </div>
+
+    <!-- II. GENETIC PROVENANCE -->
+    <div class="section">
+      <div class="section-header">II. &nbsp;Genetic &amp; Physical Provenance</div>
+      <div class="fields">
+        <div class="field"><span class="label">World of Origin</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Date of Inductment (Imperial)</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Neophyte Intake Cohort</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Apothecary Overseeing Implantation</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Gene-seed Purity Grade</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Notable Physical Traits</span><div class="val tall">— to be entered —</div></div>
+      </div>
+    </div>
+
+    <!-- III. WARGEAR -->
+    <div class="section">
+      <div class="section-header">III. &nbsp;Wargear &amp; Equipment Registry</div>
+      <div class="fields">
+        <div class="field"><span class="label">Armour Designation &amp; Mark</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Primary Ranged Armament</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Primary Melee Armament</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Secondary Weapons</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Notable Relics / Boons Carried</span><div class="val tall">— to be entered —</div></div>
+      </div>
+    </div>
+
+    <!-- IV. RANK HISTORY -->
+    <div class="section">
+      <div class="section-header">IV. &nbsp;Rank &amp; Promotion History</div>
+      <div class="table-header rank-grid">
+        <span>Imperial Date</span><span>Rank Conferred</span><span>Authorised By</span>
+      </div>
+      <div class="table-row rank-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+      <div class="table-row rank-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+      <div class="table-row rank-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+      <div class="table-row rank-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+    </div>
+
+    <!-- V. CAMPAIGN RECORD -->
+    <div class="section">
+      <div class="section-header">V. &nbsp;Campaign &amp; Battle Record</div>
+      <div class="table-header campaign-grid">
+        <span>Imperial Date</span><span>Campaign / Engagement</span><span>Theatre</span><span>Outcome</span>
+      </div>
+      <div class="table-row campaign-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+      <div class="table-row campaign-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+      <div class="table-row campaign-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+      <div class="table-row campaign-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+      <div class="table-row campaign-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+    </div>
+
+    <!-- VI. HONOURS -->
+    <div class="section">
+      <div class="section-header">VI. &nbsp;Honours &amp; Commendations</div>
+      <div class="honours-grid">
+        <div class="honor-row"><span class="honor-label">Honour / Award</span><div class="honor-val"></div></div>
+        <div class="honor-row"><span class="honor-label">Awarded For</span><div class="honor-val"></div></div>
+        <div class="honor-row"><span class="honor-label">Honour / Award</span><div class="honor-val"></div></div>
+        <div class="honor-row"><span class="honor-label">Awarded For</span><div class="honor-val"></div></div>
+        <div class="honor-row"><span class="honor-label">Honour / Award</span><div class="honor-val"></div></div>
+        <div class="honor-row"><span class="honor-label">Awarded For</span><div class="honor-val"></div></div>
+        <div class="honor-row"><span class="honor-label">Honour / Award</span><div class="honor-val"></div></div>
+        <div class="honor-row"><span class="honor-label">Awarded For</span><div class="honor-val"></div></div>
+      </div>
+    </div>
+
+    <!-- VII. CHAPLAIN ANNOTATIONS -->
+    <div class="section">
+      <div class="section-header">VII. &nbsp;Chaplain &amp; Librarian Annotations</div>
+      <div class="fields">
+        <div class="field"><span class="label">Spiritual Commendation</span><div class="val tall">— to be entered —</div></div>
+        <div class="field"><span class="label">Psychic Observation<br><small style="opacity:0.6;">(Librarian notation only)</small></span><div class="val">— N/A or to be entered —</div></div>
+        <div class="field"><span class="label">Disciplinary Notes</span><div class="val">— none recorded —</div></div>
+      </div>
+    </div>
+
+    <!-- VIII. INNER CIRCLE -->
+    <div class="section">
+      <div class="section-header">VIII. &nbsp;Inner Circle Status &nbsp;&nbsp;[EYES OF THE ROCK ONLY]</div>
+      <div class="fields">
+        <div class="field"><span class="label">Circle Initiation Level</span><div class="val redacted">████████████████ REDACTED</div></div>
+        <div class="field"><span class="label">Relevant Inquisitions / Hunts</span><div class="val redacted">████████████████ REDACTED</div></div>
+        <div class="field"><span class="label">Interrogator-Chaplain Assigned</span><div class="val redacted">████████████████ REDACTED</div></div>
+        <div class="field"><span class="label">Watchers in the Dark Notation</span><div class="val redacted">████████████████ REDACTED</div></div>
+      </div>
+    </div>
+
+    <!-- IX. CURRENT STATUS -->
+    <div class="section">
+      <div class="section-header">IX. &nbsp;Current Operational Status</div>
+      <div class="fields">
+        <div class="field"><span class="label">Status</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Current Theatre of Operation</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Last Vox Contact (Imperial Date)</span><div class="val">— to be entered —</div></div>
+        <div class="field"><span class="label">Wounds / Bionic Augmentations</span><div class="val tall">— to be entered —</div></div>
+        <div class="field"><span class="label">Superior Officer's Field Notes</span><div class="val tall">— to be entered —</div></div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- ORNAMENT -->
+  <div class="ornament">— ✦ —</div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="seal">
+      Witnessed &amp; Sealed By: <strong>Master of the Chapter / Reclusiam Scribe</strong>
+    </div>
+    <div class="motto">"Repent! For tomorrow you die."</div>
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>
